@@ -37,7 +37,7 @@ export const sendMessage = async (req, res) => {
     res.status(201).json({ success: true, message: newMessage });
   } catch (error) {
     console.error("Error in sendMessage:", error.message);
-    res.status(500).json({ success: false, message: "Internal Sever Error" });
+    res.status(500).json({ success: false, error: "Internal Sever Error" });
   }
 };
 
@@ -45,13 +45,22 @@ export const getMessage = async (req, res) => {
   try {
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
+
+    // Find conversation between sender and receiver
     const conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
     }).populate("messages");
 
-    res.status(200).json({success:true,message:conversation.messages})
+    // Check if conversation exists
+    if (!conversation) {
+      // Return empty array if no conversation found
+      return res.status(200).json({ success: true, message: [] });
+    }
+
+    // Return messages if they exist
+    res.status(200).json({ success: true, message: conversation.messages });
   } catch (error) {
     console.error("Error in getMessage:", error.message);
-    res.status(500).json({ success: false, message: "Internal Sever Error" });
+    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };

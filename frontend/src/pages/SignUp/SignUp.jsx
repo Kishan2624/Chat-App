@@ -13,16 +13,19 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  Spinner
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import useSignUp from "../../hooks/useSignUp";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    fullname: "",
+    fullName: "",
     username: "",
     password: "",
     confirmPassword: "",
-    gender: "male",
+    gender: "",
   });
 
   const handleShowClick = () => setShowPassword(!showPassword);
@@ -32,22 +35,11 @@ const SignUpPage = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Data:", formData);
+  const { loading, signUp } = useSignUp();
 
-    fetch("YOUR_BACKEND_ENDPOINT", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await signUp(formData);
   };
 
   return (
@@ -76,11 +68,12 @@ const SignUpPage = () => {
         </Heading>
 
         <form onSubmit={handleSubmit}>
-          <FormControl id="fullname" mb={3} position="relative">
+          <FormControl id="fullName" mb={3} position="relative">
             <FormLabel>Full Name</FormLabel>
             <Input
+              value={formData.fullName}
               type="text"
-              name="fullname"
+              name="fullName"
               placeholder="Enter your full name"
               onChange={handleChange}
             />
@@ -89,6 +82,7 @@ const SignUpPage = () => {
           <FormControl id="username" mb={3} position="relative">
             <FormLabel>Username</FormLabel>
             <Input
+              value={formData.username}
               type="text"
               name="username"
               placeholder="Enter your username"
@@ -100,6 +94,7 @@ const SignUpPage = () => {
             <FormLabel>Password</FormLabel>
             <InputGroup>
               <Input
+                value={formData.password}
                 type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Enter your password"
@@ -116,6 +111,7 @@ const SignUpPage = () => {
           <FormControl id="confirm-password" mb={3} position="relative">
             <FormLabel>Confirm Password</FormLabel>
             <Input
+              value={formData.confirmPassword}
               type="password"
               name="confirmPassword"
               placeholder="Confirm your password"
@@ -127,7 +123,7 @@ const SignUpPage = () => {
             <FormLabel as="legend">Gender</FormLabel>
             <RadioGroup
               name="gender"
-              defaultValue="male"
+              value={formData.gender}
               onChange={(value) => setFormData({ ...formData, gender: value })}
             >
               <Stack direction="row" spacing={5}>
@@ -137,15 +133,33 @@ const SignUpPage = () => {
             </RadioGroup>
           </FormControl>
 
-          <Button type="submit" colorScheme="blue" width="100%" mb={4}>
-            Sign Up
-          </Button>
+          {!loading ? (
+            <Button type="submit" colorScheme="blue" width="100%" mb={4}>
+              Submit
+            </Button>
+          ) : (
+            <Flex
+              justifyContent="center"
+              padding="1px"
+              border="1px"
+              borderRadius="md"
+              borderColor="gray.200"
+            >
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="lg"
+              />
+            </Flex>
+          )}
         </form>
 
         <Text textAlign="center">
           Already have an account?{" "}
           <Text as="span" color="blue.500" cursor="pointer">
-            Log In
+            <Link to="/login">Log In</Link>
           </Text>
         </Text>
       </Box>

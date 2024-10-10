@@ -17,14 +17,14 @@ export const signUp = async (req, res) => {
     if (!fullName || !username || !gender || !password || !confirmPassword) {
       return res
         .status(400)
-        .json({ success: false, message: "All Fields Required" });
+        .json({ success: false, error: "All Fields Required" });
     }
 
     // Check if passwords match
     if (password !== confirmPassword) {
       return res
         .status(403)
-        .json({ success: false, message: "Confirm Password does not match" });
+        .json({ success: false, error: "Confirm Password does not match" });
     }
 
     // Check if username already exists
@@ -65,11 +65,11 @@ export const signUp = async (req, res) => {
         profilePic: newUser.profilePic,
       });
     } else {
-      res.status(400).json({ success: false, message: "Invalid user data" });
+      res.status(400).json({ success: false, error: "Invalid user data" });
     }
   } catch (error) {
-    console.log("Error:", error.message);
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Error:", error.message);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
 
@@ -84,7 +84,7 @@ export const login = async (req, res) => {
     if (!user || !checkPassword) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid username or password" });
+        .json({ success: false, error: "Invalid username or password" });
     }
     //Generate JWT Token
     generateTokenAndSetCookie(user._id, res);
@@ -97,8 +97,8 @@ export const login = async (req, res) => {
       profilePic: user.profilePic,
     });
   } catch (error) {
-    console.log("Error", error.message);
-    res.status(500).json({ success: false, message: "Internal Server error" });
+    console.error("Error", error.message);
+    res.status(500).json({ success: false, error: "Internal Server error" });
   }
 };
 
@@ -109,7 +109,7 @@ export const logout = (req, res) => {
       .status(200)
       .json({ success: true, message: "User successfully logout!" });
   } catch (error) {
-    console.log("Error", error.message);
-    res.status(500).json({ success: false, message: "Internal Server error" });
+    console.error("Error", error.message);
+    res.status(500).json({ success: false, error: "Internal Server error" });
   }
 };

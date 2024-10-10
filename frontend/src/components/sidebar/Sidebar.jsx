@@ -12,9 +12,11 @@ const Sidebar = () => {
       borderColor="gray.200"
       position="relative"
     >
-      <VStack p={4} alignItems="flex-start" spacing={4}>
+      <VStack p={4} alignItems="flex-start" spacing={4} height="90%">
         <Search />
         <Conversations />
+      </VStack>
+      <VStack>
         <LogoutButton />
       </VStack>
     </Box>

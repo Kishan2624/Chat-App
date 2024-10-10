@@ -10,12 +10,32 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  Container,
+  Spinner,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import useLogin from "../../hooks/useLogin";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-
   const handleShowClick = () => setShowPassword(!showPassword);
+
+  const { loading, login } = useLogin();
+
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await login(formData);
+  };
 
   return (
     <Flex
@@ -41,18 +61,27 @@ const Login = () => {
           </Text>
         </Heading>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <FormControl id="username" mb={4}>
             <FormLabel>Username</FormLabel>
-            <Input type="text" placeholder="Enter your username" />
+            <Input
+              value={formData.username}
+              type="text"
+              placeholder="Enter your username"
+              name="username"
+              onChange={handleChange}
+            />
           </FormControl>
 
           <FormControl id="password" mb={4}>
             <FormLabel>Password</FormLabel>
             <InputGroup>
               <Input
+                value={formData.password}
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
+                name="password"
+                onChange={handleChange}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={handleShowClick}>
@@ -61,20 +90,33 @@ const Login = () => {
               </InputRightElement>
             </InputGroup>
           </FormControl>
-
-          <Button colorScheme="blue" width="100%" mb={4}>
-            Login
-          </Button>
+          {!loading ? (
+            <Button type="submit" colorScheme="blue" width="100%" mb={4}>
+              Login
+            </Button>
+          ) : (
+            <Flex
+              justifyContent="center"
+              padding="1px"
+              border="1px"
+              borderRadius="md"
+              borderColor="gray.200"
+            >
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="lg"
+              />
+            </Flex>
+          )}
         </form>
 
-        <Flex justifyContent="space-between" align="center">
-          <Text color="blue.500" cursor="pointer">
-            Forgot Password?
-          </Text>
-          <Text color="blue.500" cursor="pointer">
-            Create Account!
-          </Text>
-        </Flex>
+        <Text textAlign="center">Don't Have Account</Text>
+        <Text textAlign="center" color="blue.500" cursor="pointer">
+          <Link to="/signup">Create Account</Link>
+        </Text>
       </Box>
     </Flex>
   );

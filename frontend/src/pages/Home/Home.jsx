@@ -1,5 +1,5 @@
 import React from "react";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import Sidebar from "../../components/sidebar/Sidebar";
 import MessagesContainer from "../../components/messages/MessagesContainer";
 import { Flex } from "@chakra-ui/react";
 

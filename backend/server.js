@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import apiAuthRouter from "./routes/auth.routes.js";
 import apiMessageRouter from "./routes/message.routes.js";
 import apiUserRouter from "./routes/users.routes.js";
-import connectMongoDB from "./connectMongoDb/connectMongoDB.js";
+import connectMongoDB from "./connectMongoDB/connectMongoDB.js";
 
 dotenv.config(); //access to env value
 
