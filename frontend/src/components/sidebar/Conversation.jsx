@@ -10,11 +10,14 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import useConversation from "../../zustand/useConversation";
+import { useSocketContext } from "../../context/SocketContext";
 
 const Conversation = ({ user, lastidx, emoji }) => {
   const { fullName, profilePic, _id } = user;
   const { selectedConversation, setSelectedConversation } = useConversation();
   const isSelectedConversation = selectedConversation?._id === _id;
+  const { onlineUsers } = useSocketContext();
+  const isOnline = onlineUsers?.includes(_id);
   return (
     <>
       <ListItem
@@ -28,11 +31,16 @@ const Conversation = ({ user, lastidx, emoji }) => {
         onClick={() => setSelectedConversation(user)}
       >
         <Avatar name={fullName} src={profilePic} size="sm">
-          <AvatarBadge
-            borderColor="papayawhip"
-            boxSize="1.25em"
-            bg="green.500"
-          />
+          {isOnline && (
+            <AvatarBadge
+              borderColor="papayawhip"
+              boxSize="1.25em"
+              bg="blue.500"
+              position="absolute"
+              top="-2"
+              left="-2"
+            />
+          )}
         </Avatar>
         <HStack ml={3} flexGrow={1}>
           <Text fontWeight="bold">{fullName}</Text>

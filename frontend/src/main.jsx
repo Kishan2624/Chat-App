@@ -4,6 +4,7 @@ import * as ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AuthContextProvider } from "./context/AuthContext";
+import { SocketContextProvider } from "./context/SocketContext";
 
 const rootElement = document.getElementById("root");
 ReactDOM.createRoot(rootElement).render(
@@ -11,7 +12,9 @@ ReactDOM.createRoot(rootElement).render(
     <ChakraProvider>
       <BrowserRouter>
         <AuthContextProvider>
-          <App />
+          <SocketContextProvider>
+            <App />
+          </SocketContextProvider>
         </AuthContextProvider>
       </BrowserRouter>
     </ChakraProvider>

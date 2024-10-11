@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import Message from "./Message";
 import { Box, Skeleton, VStack } from "@chakra-ui/react";
 import useGetMessage from "../../hooks/useGetMessage";
+import useListenNewMessage from "../../hooks/useListenNewMessage";
 
 const Messages = () => {
   const { loading, messages } = useGetMessage();
   const lastMessageRef = React.useRef(null); // Ref to track the last message
-
+  useListenNewMessage();
   // Scroll to the last message whenever new messages are loaded
   useEffect(() => {
     if (lastMessageRef.current) {
