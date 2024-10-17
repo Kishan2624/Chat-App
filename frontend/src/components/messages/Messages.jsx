@@ -17,12 +17,12 @@ const Messages = () => {
 
   return (
     <Skeleton isLoaded={!loading} width="100%">
-      {messages.length > 0 ? (
-        messages.map((message, idx) => {
+      {messages?.length > 0 ? (
+        messages?.map((message, idx) => {
           const isLastMessage = idx === messages.length - 1; // Check if it's the last message
           return (
-            <Box ref={isLastMessage ? lastMessageRef : null}>
-              <Message key={message._id} message={message} />
+            <Box ref={isLastMessage ? lastMessageRef : null} key={message._id}>
+              <Message message={message} />
             </Box>
           );
         })

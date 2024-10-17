@@ -6,12 +6,12 @@ import getRandomEmoji from "../../utlis/randomEmojiGenerator";
 
 const Conversations = () => {
   const { loading, conversation } = useGetConversation();
-
+  console.log(conversation);
   return (
     <>
       {!loading ? (
         <List spacing={3} width="100%">
-          {conversation.map((user, idx) => (
+          {conversation?.map((user, idx) => (
             <Conversation
               key={user._id}
               user={user}
